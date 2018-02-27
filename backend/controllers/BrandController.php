@@ -18,12 +18,13 @@ class BrandController extends Controller
 {
    //页面
    public function actionIndex(){
+       $a = Brand::find()->where(['is_deleted'=>0]);
      $paper = new Pagination();
      //总条数
      $paper->totalCount = Brand::find()->count();
      //显示多少条
        $paper->defaultPageSize = 5 ;
-      $rows = Brand::find()->offset($paper->offset)->limit($paper->limit)->all();
+      $rows = $a->offset($paper->offset)->limit($paper->limit)->all();
      return $this->render('index',['rows'=>$rows,'paper'=>$paper]);
    }
    //添加
@@ -78,7 +79,8 @@ class BrandController extends Controller
     }
     //删除
     public function actionDelete($id){
-        $model = Brand::findOne(['id'=>$id]);
-        
+       \Yii::$app->db->createCommand()->update('brand',['is_deleted'=>1],['id'=>$id])->execute();
+        \Yii::$app->session->setFlash('success','删除成功');
+        return $this->redirect(['brand/index']);
     }
 }
