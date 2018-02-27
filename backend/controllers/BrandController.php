@@ -16,6 +16,8 @@ use yii\web\UploadedFile;
 
 class BrandController extends Controller
 {
+
+    public $enableCsrfValidation = false;
    //页面
    public function actionIndex(){
        $a = Brand::find()->where(['is_deleted'=>0]);
@@ -34,13 +36,7 @@ class BrandController extends Controller
        if($request->isPost){
            //自动加载
            $model->load($request->post());
-           //通过验证
-           $model->imgFile = UploadedFile::getInstance($model,'imgFile');
            if ($model->validate()){
-               //处理图片
-              $file = '/upload/'.uniqid().'.'.$model->imgFile->extension;
-              $model->imgFile->saveAs(\Yii::getAlias('@webroot').$file,0);
-              $model->logo = $file;
               //保存是否删除
                $model->is_deleted = 0;
                $model->save();
@@ -59,11 +55,7 @@ class BrandController extends Controller
         $request = \Yii::$app->request;
         if ($request->isPost){
             $model->load($request->post());
-            $model->imgFile = UploadedFile::getInstance($model,'imgFile');
             if ($model->validate()){
-                $file = '/upload/'.uniqid().'.'.$model->imgFile->extension;
-                $model->imgFile->saveAs(\Yii::getAlias('@webroot').$file,0);
-                $model->logo = $file;
                 //保存是否删除
                 $model->is_deleted = 0;
                 $model->save();
@@ -82,5 +74,21 @@ class BrandController extends Controller
        \Yii::$app->db->createCommand()->update('brand',['is_deleted'=>1],['id'=>$id])->execute();
         \Yii::$app->session->setFlash('success','删除成功');
         return $this->redirect(['brand/index']);
+    }
+    //图片上传
+    public function actionUpload(){
+        //var_dump($_FILES);die;
+        //使用图片工具获取file对象
+        $file = UploadedFile::getInstanceByName('file');
+        //保存路径
+        $path = '/upload/'.uniqid().$file->extension;
+        $rs = $file->saveAs(\Yii::getAlias('@webroot').$path);
+        if($rs){
+            //上传成功
+            return json_encode([
+                'url'=>$path,
+                'message'=>'success',
+            ]);
+        }
     }
 }
