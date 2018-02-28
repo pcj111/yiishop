@@ -53,16 +53,5 @@ class ArticleCategory extends \yii\db\ActiveRecord
     /** 获取全部分类
      * @return array
      */
-    public static function allCategory(){
 
-        $categories=self::find()->all();
-
-        $arr=['请选择分类'];
-
-        foreach ($categories as $category){
-
-            $arr[$category->id]=$category->name;
-        }
-        return $arr;
-    }
 }
