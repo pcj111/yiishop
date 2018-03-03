@@ -56,7 +56,12 @@ class GoodsCategoryController extends \yii\web\Controller
                     $model->prependTo($parent);
                 }else{
                     //父分类
-                    $model->makeRoot();
+                    if ($model->getOldAttribute('parent_id')==0 ){
+                       $model->save();
+                    }else{
+                        $model->makeRoot();
+                    }
+
                 }
             }
             \Yii::$app->session->setFlash('success','修改成功');
@@ -74,6 +79,7 @@ class GoodsCategoryController extends \yii\web\Controller
             $model->delete();
             \Yii::$app->session->setFlash('success','删除成功');
         }else{
+
             \Yii::$app->session->setFlash('danger','父级不能删除');
         }
         return $this->redirect(['goods-category/index']);
