@@ -1,14 +1,13 @@
+<form action="<?= \yii\helpers\Url::to(['goods/index'])?>" method="get">
+    <input type="text" name="name" placeholder="请输入名称">
+    <input type="text" name="sn" placeholder="请输入货号">
+    <input type="text" name="start" placeholder="Y">
+    <input type="text" name="end" placeholder="Y">
+    <button type="submit">搜索</button>
+    <button type="reset">清除</button>
+</form>
 
 <table class="table table-bordered table-condensed">
-    <?php
-     $form =\yii\bootstrap\ActiveForm::begin(['layout'=>'inline','method'=>'get']);
-        echo$form->field($model,'name')->textInput(['placeholder'=>'商品名','style'=>'width:100px']);
-        echo$form->field($model,'sn')->textInput(['placeholder'=>'货号','style'=>'width:100px']);
-        echo$form->field($model,'start')->textInput(['placeholder'=>'￥','style'=>'width:100px']);
-        echo $form->field($model,'end')->textInput(['placeholder'=>'￥','style'=>'width:100px']);
-        echo '<button type="submit" class="btn btn-default" >搜索</button>';
-        \yii\bootstrap\ActiveForm::end();
-       ?>
 
     <tr>
         <td>id</td>

@@ -16,16 +16,34 @@ class GoodsController extends Controller{
     public $enableCsrfValidation = false;
     //展示列表
     public function actionIndex(){
-        echo '111';
-        $model = new SeachForm();
+
         //分页插件
         $query = Goods::find()->where(['status'=>1]);
+        //搜索
+        $request = \Yii::$app->request;
+        $name = $request->get('name');
+        $sn = $request->get('sn');
+        $start = $request->get('start');
+        $end = $request->get('end');
+        if ($name){
+            $query->andWhere(['like','name',$name]);
+        }
+        if ($sn){
+            $query->andWhere(['like','sn',$sn]);
+        }
+        if ($start){
+            $query->andWhere(['>','market_price',$start]);
+        }
+        if ($end){
+            $query->andWhere(['<','shop_price',$end]);
+        }
+
         $paper = new Pagination();
         $paper->totalCount = Goods::find()->count();
         $paper->defaultPageSize = 5;
 
         $rows = $query->offset($paper->offset)->limit($paper->limit)->all();
-        return $this->render('index',['rows'=>$rows,'paper'=>$paper,'model'=>$model]);
+        return $this->render('index',['rows'=>$rows,'paper'=>$paper,]);
     }
     //添加
     public function actionAdd(){
