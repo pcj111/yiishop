@@ -40,28 +40,45 @@ AppAsset::register($this);
     ];
     if (Yii::$app->user->isGuest) {
         //$menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
-
         $menuItems[] = ['label' => '登录', 'url' => ['/login/login']];
-           // $menuItems[] = ['label' => '退出', 'url' => ['/login/exit']];
 
 
     } else {
-        $menuItems[] = '<li>'
-            . Html::beginForm(['/login/exit'], 'post')
-            . Html::submitButton(
-                '退出 (' . Yii::$app->user->identity->username . ')',
-                ['class' => 'btn btn-link logout']
-            )
-            . Html::endForm()
-            . '</li>';
-        $menuItems[] = '<li>'
-            . Html::beginForm(['/admin/rs'], 'post')
-            . Html::submitButton(
-                '修改密码',
-                ['class' => 'btn btn-link logout']
-            )
-            . Html::endForm()
-            . '</li>';
+        $menuItems[] = [
+            'label' => '商品管理',
+            'items' => [
+                ['label' => '添加商品', 'url' => ['goods/add']],
+                ['label' => '商品列表', 'url' => ['goods/index']],
+                ['label' => '添加商品分类', 'url' => ['goods-category/add']],
+                ['label' => '商品分类列表', 'url' => ['goods-category/index']],
+            ],
+        ];
+
+
+        $menuItems[] = [
+            'label' => '用户管理',
+            'items' => [
+                ['label' => '添加用户', 'url' => ['admin/add']],
+                ['label' => '用户列表', 'url' => ['admin/index']],
+            ],
+        ];
+
+        $menuItems[] = [
+            'label' => '文章管理',
+            'items' => [
+                 ['label' => '添加文章', 'url' => ['article/add']],
+                ['label' => '文章列表', 'url' => ['article/index']],
+                ['label' => '添加文章分类', 'url' => ['article-category/add']],
+                ['label' => '查看文章分类', 'url' => ['article-category/index']],
+                ],
+        ];
+
+        $menuItems[] = [
+            'label' => '用户 ' . Yii::$app->user->identity->username . '',
+            'items' => [['label' => '修改密码', 'url' => ['admin/rs']],
+                ['label' => '退出登录', 'url' => ['login/exit']],],];
+
+
     }
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],

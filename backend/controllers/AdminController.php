@@ -74,7 +74,7 @@ class AdminController extends Controller
     //删除
     public function actionDelete($id){
         $model = Admin::findOne(['id'=>$id]);
-       // var_dump($model);die;
+        //var_dump($model);die;
         //var_dump($model);die;
          $model->delete();
         \Yii::$app->session->setFlash('success', '删除成功');
@@ -106,9 +106,25 @@ class AdminController extends Controller
                     \Yii::$app->session->setFlash('success', '密码不正确');
                     return $this->redirect(['admin/rs']);
                 }
-
             }
         }
         return $this->render('password', ['model' => $model]);
      }
+     //重置密码
+    public function actionRes($id){
+        $model = Admin::findOne(['id'=>$id]);
+        $model->password_hash='';
+        $request =\Yii::$app->request;
+        if ($request->isPost){
+            $model->load($request->post());
+            if ($model->validate()){
+                $model->password_hash = \Yii::$app->security->generatePasswordHash($model->password_hash);
+                $model->save();
+                \Yii::$app->session->setFlash('success', '设置成功');
+                return $this->redirect(['admin/index']);
+            }
+        }
+
+        return $this->render('res',['model'=>$model]);
+    }
  }

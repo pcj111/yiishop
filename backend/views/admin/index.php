@@ -16,6 +16,7 @@
             <td>
                 <a href="<?=\yii\helpers\Url::to(['admin/edit','id'=>$row->id])?>" class="btn btn-info">修改</a>
                 <a href="<?=\yii\helpers\Url::to(['admin/delete','id'=>$row->id])?>" class="btn btn-danger">删除</a>
+                <a href="<?=\yii\helpers\Url::to(['admin/res','id'=>$row->id])?>" class="btn btn-warning">重置密码</a>
             </td>
         </tr>
     <?php endforeach;?>
