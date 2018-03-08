@@ -44,51 +44,11 @@ AppAsset::register($this);
 
 
     } else {
-        $menuItems[] = [
-            'label' => 'BRUD',
-            'items' => [
-                ['label' => '添加权限', 'url' => ['rbac/add']],
-                ['label' => '权限列表', 'url' => ['rbac/index']],
-                ['label' => '角色列表', 'url' => ['rolu/index']],
-                ['label' => '角色添加', 'url' => ['rolu/add']],
-            ],
-        ];
-
-        $menuItems[] = [
-            'label' => '商品管理',
-            'items' => [
-                ['label' => '添加商品', 'url' => ['goods/add']],
-                ['label' => '商品列表', 'url' => ['goods/index']],
-                ['label' => '添加商品分类', 'url' => ['goods-category/add']],
-                ['label' => '商品分类列表', 'url' => ['goods-category/index']],
-            ],
-        ];
-
-
-        $menuItems[] = [
-            'label' => '用户管理',
-            'items' => [
-                ['label' => '添加用户', 'url' => ['admin/add']],
-                ['label' => '用户列表', 'url' => ['admin/index']],
-
-            ],
-        ];
-
-        $menuItems[] = [
-            'label' => '文章管理',
-            'items' => [
-                 ['label' => '添加文章', 'url' => ['article/add']],
-                ['label' => '文章列表', 'url' => ['article/index']],
-                ['label' => '添加文章分类', 'url' => ['article-category/add']],
-                ['label' => '查看文章分类', 'url' => ['article-category/index']],
-                ],
-        ];
-
+        $menuItems = \backend\models\Menu::getMenus($menuItems);
         $menuItems[] = [
             'label' => '用户 ' . Yii::$app->user->identity->username . '',
             'items' => [['label' => '修改密码', 'url' => ['admin/rs']],
                 ['label' => '退出登录', 'url' => ['login/exit']],],];
-
 
     }
     echo Nav::widget([

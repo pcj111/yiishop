@@ -25,6 +25,7 @@ class RoluController extends Controller
     //添加
     public function actionAdd(){
         $model = new RoluForm();
+        $model->scenario = RoluForm::SCENARIO_ADD;
         $request = \Yii::$app->request;
         if ($request->isPost){
             $model->load($request->post());
@@ -65,21 +66,30 @@ class RoluController extends Controller
             throw new HttpException('403','角色不存在');
         }
         $model = new RoluForm();
+        $model->scenario = RoluForm::SCENARIO_EDIT;
         $model->name = $a->name;
         $model->description = $a->description;
         $permissions = $authManager->getPermissionsByRole($a->name);
+        $model->permission=[];
         foreach($permissions as $permission){
-            $arr[] = $permission->name;
+            $model->permission[] = $permission->name;
         }
-        $model->permission =$arr;
         $request = \Yii::$app->request;
         if ($request->isPost){
             $model->load($request->post());
             if ($model->validate()){
                 $a->name = $model->name;
-                $a->description=$model->validate();
+                $a->description=$model->description;
                 $authManager->update($name,$a);
                 //提交多选框
+                //清楚该角色的所有权限
+                $authManager->removeChildren($a);
+                if (is_array($model->permission)){
+                    foreach ($model->permission as $permissionName){
+                        $permission = $authManager->getPermission($permissionName);
+                        $authManager->addChild($a,$permission);
+                    }
+                }
 
                 \Yii::$app->session->setFlash('success','修改成功');
                 return $this->redirect(['rolu/index']);

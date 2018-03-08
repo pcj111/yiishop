@@ -39,7 +39,13 @@ class AdminController extends Controller
                 $model->auth_key=\Yii::$app->security->generateRandomString();
                 //创建时间
                 $model->created_at=time();
-                $model->save();
+                if ( $model->save()){
+                    $authManager = \Yii::$app->authManager;
+                    foreach ($model->roles as $role){
+                        $a = $authManager->getRole($role);
+                        $authManager->assign($a,$model->id);
+                    }
+                }
                 \Yii::$app->session->setFlash('success', '添加成功');
                 return $this->redirect(['admin/index']);
             } else {
@@ -54,14 +60,30 @@ class AdminController extends Controller
     public function actionEdit($id)
     {
         $model = Admin::findOne(['id' => $id]);
+        $authManger = \Yii::$app->authManager;
+        $rolus =  $authManger->getRolesByUser($id);
+        $model->roles = [];
+        foreach ($rolus as $role){
+          $model->roles[]=$role->name;
+        }
         $request = \Yii::$app->request;
         if ($request->isPost) {
             $model->load($request->post());
             if ($model->validate()) {
                 $model->new_password = \Yii::$app->security->generatePasswordHash($model->new_password);
                 $model->updated_at =time();
-                $model->save();
-                \Yii::$app->session->setFlash('success', '添加成功');
+                if ($model->save()){
+                    //提交多选框
+                    //清楚该角色的所有权限
+                    $authManger->revokeAll($model->id);
+                    if (is_array($model->roles)){
+                        foreach ($model->roles as $permissionName){
+                            $permission = $authManger->getRole($permissionName);
+                            $authManger->assign($permission,$model->id);
+                        }
+                    }
+                }
+                \Yii::$app->session->setFlash('success', '修改成功');
                 return $this->redirect(['admin/index']);
             } else {
                 //提示错误信息
@@ -74,10 +96,7 @@ class AdminController extends Controller
     //删除
     public function actionDelete($id){
         $model = Admin::findOne(['id'=>$id]);
-        //var_dump($model);die;
-        //var_dump($model);die;
          $model->delete();
-
         return json_encode(['code'=>1]);
     }
     //修改密码

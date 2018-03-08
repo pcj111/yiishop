@@ -26,6 +26,8 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
     public $new_password;//新密码
     public $old_password;//旧密码
     public $password;//确认密码
+    public $roles;//角色
+
 
 
     const SCENARIO_EDIT = 'exit';
@@ -42,6 +44,7 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return [
             [['username', 'password_hash', 'email'], 'required'],
+            [['roles'],'safe'],
             [['status', 'created_at', 'updated_at', 'last_login_time', 'last_login_ip'], 'integer'],
             [['username', 'password_hash', 'email'], 'string', 'max' => 255],
             [['username'], 'unique'],
@@ -69,7 +72,8 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
             'last_login_ip' => '最后登录ip',
             'new_password'=>'新密码',
             'password'=>'确认密码',
-            'old_password'=>'旧密码'
+            'old_password'=>'旧密码',
+            'roles'=>'角色'
         ];
     }
 
@@ -136,5 +140,15 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
     public function validateAuthKey($authKey)
     {
         return $this->getAuthKey()===$authKey;
+    }
+
+    public static function getName(){
+        $authManger = Yii::$app->authManager;
+        $roles = $authManger->getRoles();
+        $a = [];
+        foreach($roles as $role){
+            $a[$role->name]=$role->name;
+        }
+        return $a;
     }
 }
