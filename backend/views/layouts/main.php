@@ -45,6 +45,16 @@ AppAsset::register($this);
 
     } else {
         $menuItems[] = [
+            'label' => 'BRUD',
+            'items' => [
+                ['label' => '添加权限', 'url' => ['rbac/add']],
+                ['label' => '权限列表', 'url' => ['rbac/index']],
+                ['label' => '角色列表', 'url' => ['rolu/index']],
+                ['label' => '角色添加', 'url' => ['rolu/add']],
+            ],
+        ];
+
+        $menuItems[] = [
             'label' => '商品管理',
             'items' => [
                 ['label' => '添加商品', 'url' => ['goods/add']],
@@ -60,6 +70,7 @@ AppAsset::register($this);
             'items' => [
                 ['label' => '添加用户', 'url' => ['admin/add']],
                 ['label' => '用户列表', 'url' => ['admin/index']],
+
             ],
         ];
 

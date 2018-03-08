@@ -59,7 +59,7 @@ uploader.on('uploadSuccess',function(file,response) {
 })
 JS
 );
-echo '<img id="logo_view" width="120px">';
+echo '<img id="logo_view" width="120px" src="'.$model->logo.'">';
 echo '<br>';
 //商品分类id
 echo $form->field($model,'goods_category_id')->hiddenInput();

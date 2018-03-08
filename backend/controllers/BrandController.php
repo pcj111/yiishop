@@ -9,6 +9,7 @@
 namespace backend\controllers;
 
 
+use backend\fiftrs\RbacFirter;
 use backend\models\Brand;
 use yii\data\Pagination;
 use yii\web\Controller;
@@ -90,5 +91,12 @@ class BrandController extends Controller
                 'message'=>'success',
             ]);
         }
+    }
+    public function behaviors()
+    {
+        return [
+            'rbac'=>
+                ['class'=>RbacFirter::class]
+        ];
     }
 }

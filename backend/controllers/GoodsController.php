@@ -80,7 +80,7 @@ class GoodsController extends Controller{
        //var_dump($model->getErrors());die;
         return $this->render('add',['model'=>$model,'intro'=>$intro,'nodes'=>json_encode($nodes)]);
     }
-    //删除
+    //修改
      public function actionEdit($id){
          $model = Goods::findOne(['id'=>$id]);
          $intro = GoodsIntro::findOne(['goods_id'=>$id]);

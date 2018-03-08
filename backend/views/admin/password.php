@@ -1,7 +1,7 @@
 <?php
 $form = \yii\bootstrap\ActiveForm::begin();
 
-echo $form->field($model,'old_password')->textInput();
+echo $form->field($model,'old_password')->passwordInput();
 
 echo $form->field($model,'new_password')->passwordInput();
 

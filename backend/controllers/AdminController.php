@@ -77,8 +77,8 @@ class AdminController extends Controller
         //var_dump($model);die;
         //var_dump($model);die;
          $model->delete();
-        \Yii::$app->session->setFlash('success', '删除成功');
-        return $this->redirect(['admin/index']);
+
+        return json_encode(['code'=>1]);
     }
     //修改密码
     public function actionRs()
