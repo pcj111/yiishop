@@ -9,6 +9,7 @@
 namespace backend\controllers;
 
 
+use backend\fiftrs\RbacFirter;
 use backend\models\Admin;
 use Symfony\Component\DomCrawler\Field\InputFormField;
 use yii\data\Pagination;
@@ -96,7 +97,7 @@ class AdminController extends Controller
     //删除
     public function actionDelete($id){
         $model = Admin::findOne(['id'=>$id]);
-         $model->delete();
+        $model->delete();
         return json_encode(['code'=>1]);
     }
     //修改密码
@@ -145,5 +146,15 @@ class AdminController extends Controller
         }
 
         return $this->render('res',['model'=>$model]);
+    }
+    //Rbac验证(权限)
+    public function behaviors()
+    {
+        return [
+            'rbac'=>[
+                'class'=>RbacFirter::class,
+                'except'=>['login','logout','rs','captcha']
+            ]
+        ];
     }
  }

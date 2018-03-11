@@ -9,6 +9,7 @@
 namespace backend\controllers;
 
 
+use backend\fiftrs\RbacFirter;
 use backend\models\PremissionForm;
 use yii\web\Controller;
 use yii\web\HttpException;
@@ -116,4 +117,13 @@ class RbacController extends Controller
         \Yii::$app->session->setFlash('success','删除成功');
         return $this->redirect(['rbac/index']);
     }
+    public function behaviors()
+    {
+        return [
+            'rbac'=>[
+                'class'=>RbacFirter::class,
+            ]
+        ];
+    }
+
 }

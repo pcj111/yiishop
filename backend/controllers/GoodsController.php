@@ -2,6 +2,7 @@
 namespace backend\controllers;
 
 
+use backend\fiftrs\RbacFirter;
 use backend\models\Goods;
 use backend\models\GoodsCategory;
 use backend\models\GoodsDayCount;
@@ -148,6 +149,15 @@ class GoodsController extends Controller{
                     "imagePathFormat" => "/upload/image/{yyyy}{mm}{dd}/{time}{rand:6}", //上传保存路径
                     "imageRoot" => \Yii::getAlias("@webroot"),
                 ],
+            ]
+        ];
+    }
+    public function behaviors()
+    {
+        return [
+            'rbac'=>[
+                'class'=>RbacFirter::class,
+                'except'=>['look','img','upload']
             ]
         ];
     }

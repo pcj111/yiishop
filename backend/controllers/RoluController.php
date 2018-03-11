@@ -9,6 +9,7 @@
 namespace backend\controllers;
 
 
+use backend\fiftrs\RbacFirter;
 use backend\models\RoluForm;
 use phpDocumentor\Reflection\DocBlock\Tags\Return_;
 use phpDocumentor\Reflection\DocBlock\Tags\Var_;
@@ -98,4 +99,13 @@ class RoluController extends Controller
 
         return $this->render('add',['model'=>$model]);
     }
+    public function behaviors()
+    {
+        return [
+            'rbac'=>[
+                'class'=>RbacFirter::class,
+            ]
+        ];
+    }
+
 }

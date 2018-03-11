@@ -10,6 +10,7 @@ namespace backend\controllers;
 
 
 
+use backend\fiftrs\RbacFirter;
 use backend\models\Article;
 use backend\models\ArticleDetail;
 use yii\data\Pagination;
@@ -90,4 +91,17 @@ class ArticleController extends Controller
         $model = ArticleDetail::findOne(['article_id'=>$id]);
         return $this->render('look',['model'=>$model]);
     }
+    public function behaviors()
+   {
+       return [
+           'article'=>[
+               'class'=>RbacFirter::className(),
+               'except'=>[
+
+               ]
+           ]
+       ];
+   }
+
+
 }

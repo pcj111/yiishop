@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\fiftrs\RbacFirter;
 use backend\models\GoodsCategory;
 use yii\data\Pagination;
 
@@ -98,6 +99,16 @@ class GoodsCategoryController extends \yii\web\Controller
         $russia->parent_id=$prant->id;
         $russia->prependTo($prant);
         echo'成功';*/
+    }
+    public function behaviors()
+    {
+        return [
+            'rbac'=>[
+                'class'=>RbacFirter::class,
+                'except'=>['upload']
+
+            ]
+        ];
     }
 
 

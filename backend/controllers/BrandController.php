@@ -95,8 +95,11 @@ class BrandController extends Controller
     public function behaviors()
     {
         return [
-            'rbac'=>
-                ['class'=>RbacFirter::class]
+            'rbac'=>[
+                'class'=>RbacFirter::class,
+                'except'=>['upload']
+
+            ]
         ];
     }
 }

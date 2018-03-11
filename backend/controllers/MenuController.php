@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\fiftrs\RbacFirter;
 use backend\models\Menu;
 
 class MenuController extends \yii\web\Controller
@@ -54,5 +55,14 @@ class MenuController extends \yii\web\Controller
         }
           return $this->render('add',['model'=>$model]);
     }
+    public function behaviors()
+    {
+        return [
+            'rbac'=>[
+                'class'=>RbacFirter::class,
+            ]
+        ];
+    }
+
 
 }

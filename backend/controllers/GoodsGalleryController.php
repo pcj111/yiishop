@@ -9,6 +9,7 @@
 namespace backend\controllers;
 
 
+use backend\fiftrs\RbacFirter;
 use backend\models\GoodsGallery;
 use yii\web\Controller;
 use yii\web\UploadedFile;
@@ -60,5 +61,15 @@ class GoodsGalleryController extends Controller
            \Yii::$app->session->setFlash('success','删除成功');
            return $this->redirect(['goods-gallery/index','id'=>$model->id]);
        }
+
+    public function behaviors()
+    {
+        return [
+            'rbac'=>[
+                'class'=>RbacFirter::class,
+                'except'=>['img']
+            ]
+        ];
+    }
 
 }

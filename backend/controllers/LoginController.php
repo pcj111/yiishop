@@ -9,6 +9,7 @@
 namespace backend\controllers;
 
 
+use backend\fiftrs\RbacFirter;
 use backend\models\Admin;
 use backend\models\LoginForm;
 use yii\captcha\CaptchaAction;
@@ -46,6 +47,15 @@ class LoginController extends Controller
                 'class'=>CaptchaAction::className(),
                 'minLength'=>3,
                 'maxLength'=>4
+            ]
+        ];
+    }
+    public function behaviors()
+    {
+        return [
+            'rbac'=>[
+                'class'=>RbacFirter::class,
+                'except'=>['login','exit','captcha','captcha']
             ]
         ];
     }

@@ -83,7 +83,5 @@ class Menu extends \yii\db\ActiveRecord
         }
         return $menuItems;
     }
-    public function getM(){
 
-    }
 }
