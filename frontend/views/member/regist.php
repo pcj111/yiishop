@@ -93,7 +93,7 @@
                     </li>
                     <li>
                         <label for="">验证码：</label>
-                        <input type="text" class="txt" value="" placeholder="请输入短信验证码" name="captcha" disabled="disabled" id="captcha"/> <input type="button" onclick="bindPhoneNum(this)" id="get_captcha" value="获取验证码" style="height: 25px;padding:3px 8px"/>
+                        <input type="text" class="txt" value="" placeholder="请输入短信验证码" name="code" disabled="disabled" id="code"/> <input type="button" onclick="bindPhoneNum(this)" id="get_captcha" value="获取验证码" style="height: 25px;padding:3px 8px"/>
 
                     </li>
                     <li class="checkcode">
@@ -189,6 +189,21 @@
                 },
                 captcha:"validateCaptcha",
 
+                code:{
+                    required: true,
+                    minlength: 6,
+                    remote:{
+                        url: "<?=\yii\helpers\Url::to(['member/validate-sms'])?>",     //后台处理程序
+                        //type: "post",               //数据发送方式
+                        //dataType: "json",           //接受数据格式
+                        data: {                     //要传递的数据
+                            tel: function() {
+                                return $("#tel").val();
+                            }
+                        }
+                    }
+                }
+
             },
             messages: {
                 username: {
@@ -220,24 +235,27 @@
         })
     });
    function bindPhoneNum(){
+       var tel= $('#tel').val();
+       $.get('<?=\yii\helpers\Url::to(['member/sms'])?>',{tel:tel},function (data) {
+       });
       //启用输入框
-//    $('#captcha').prop('disabled',false);
-//     var time=30;
-//      var interval = setInterval(function(){
-//         time--;
-//          if(time<=0){
-//             clearInterval(interval);
-//                var html = '获取验证码';
-//                $('#get_captcha').prop('disabled',false);
-//            } else{
-//                var html = time + ' 秒后再次获取';
-//                $('#get_captcha').prop('disabled',true);
-//            }
-//
-//            $('#get_captcha').val(html);
-//        },1000);
-    }
+    $('#code').prop('disabled',false);
+     var time=30;
 
+      var interval = setInterval(function(){
+
+         time--;
+          if(time<=0){
+             clearInterval(interval);
+                var html = '获取验证码';
+                $('#get_captcha').prop('disabled',false);
+            } else{
+                var html = time + ' 秒后再次获取';
+                $('#get_captcha').prop('disabled',true);
+            }
+            $('#get_captcha').val(html);
+        },1000);
+    }
     $("#change_captcha").click(function () {
 
         //获取新验证码图片的url

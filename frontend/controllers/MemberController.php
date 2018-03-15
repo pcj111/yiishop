@@ -3,20 +3,29 @@
 namespace frontend\controllers;
 
 use app\models\Address;
+use backend\models\Goods;
+use backend\models\GoodsCategory;
 use frontend\models\Member;
 use frontend\models\LoginForm;
+use frontend\aliyun\SignatureHelper;
 
 class MemberController extends \yii\web\Controller
 {
+    //主页
+    public function actionIndex(){
+        $categorys = GoodsCategory::find()->where(['parent_id'=>0])->all();
+
+        return $this->render('index',['categorys'=>$categorys]);
+    }
+    //注册
     public function actionRegist()
     {
         $model = new Member();
         $request = \Yii::$app->request;
         if ($request->isPost){
             $model->load($request->post(),'');
-            if ($model->validate()){
+            if ($model->validate() && ($this->actionValidateSms($model->tel,$model->code)=='true')){
                //验证通过
-//                var_dump($model);exit;
                 $model->password_hash = \Yii::$app->security->generatePasswordHash($model->password);
                 $model->auth_key=\Yii::$app->security->generateRandomString();
                 $model->created_at=time();
@@ -51,6 +60,17 @@ class MemberController extends \yii\web\Controller
         }
         return 'true';
     }
+    //异步验证短信
+    public function actionValidateSms($tel,$code){
+        $redis = new \Redis();
+        $redis->connect('127.0.0.1');
+        $c = $redis->get('code_'.$tel);
+        if ($c == $code){
+            return 'true';
+        }else{
+            return 'false';
+        }
+    }
     //登录
     public function actionLogin(){
         $model = new LoginForm();
@@ -59,7 +79,7 @@ class MemberController extends \yii\web\Controller
             $model->load($request->post(), '');
 //            var_dump($model->login());die;
             if ($model->validate() && $model->login()) {
-                return $this->redirect(['member/address']);
+                return $this->redirect(['member/index']);
             }
         }
         return $this->render('login');
@@ -110,4 +130,35 @@ class MemberController extends \yii\web\Controller
         }
         return $this->render('addressEdit',['model'=>$model]);
     }
+    //短信验证
+    public function actionSms($tel){
+        $code = rand(100000,999999);
+        $redis = new \Redis();
+        $redis->connect('127.0.0.1');
+        //保存到redis;
+        $redis->set('code_'.$tel,$code,5*60);
+      $r = \Yii::$app->sms->setTel($tel)->setParams(['code'=>$code])->send();
+      //返回ajax
+        if($r){
+            return 'success';
+        }else{
+            return 'fail';
+        }
+
+    }
+    //页面
+    public function actionList($id){
+        $lists = Goods::find()->where(['goods_category_id'=>$id])->all();
+        return $this->render('list',['lists'=>$lists]);
+    }
+    //商品详情
+    public function actionGoods($id){
+
+
+         $good = Goods::findOne(['id'=>$id]);
+         //var_dump($good);
+        return $this->render('goods',['good'=>$good]);
+    }
+
+
 }

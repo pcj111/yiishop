@@ -13,6 +13,14 @@ return [
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
+
+        'sms' => [
+            'class'=>\frontend\aliyun\SmsHelper::class,
+            'ak'=>'LTAIhAM8KFfVkya7',
+            'sk'=>'6P1VzerZ7euyfaYtthNcIcwF7aNA6G',
+            'sign'=>'心欲商务KTV',
+            'template'=>'SMS_126885023'
+        ],
         'request' => [
             'csrfParam' => '_csrf-frontend',
         ],
@@ -44,6 +52,7 @@ return [
             'suffix'=>'.html',
             'rules' => [
             ],
+
         ],
 
     ],

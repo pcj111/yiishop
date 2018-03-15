@@ -24,6 +24,7 @@ $(function(){
 		});
 
 		$("#total").text(total.toFixed(2));
+        changeAmount($(this).closest('tr').attr('data_id'),$(amount).val());
 	});
 
 	//增加
@@ -40,10 +41,12 @@ $(function(){
 		});
 
 		$("#total").text(total.toFixed(2));
+        changeAmount($(this).closest('tr').attr('data_id'),$(amount).val());
 	});
 
 	//直接输入
 	$(".amount").blur(function(){
+        var amount = $(this).parent().find(".amount");
 		if (parseInt($(this).val()) < 1){
 			alert("商品数量最少为1");
 			$(this).val(1);
@@ -58,6 +61,24 @@ $(function(){
 		});
 
 		$("#total").text(total.toFixed(2));
-
+        changeAmount($(this).closest('tr').attr('data_id'),$(amount).val());
 	});
+	//删除
+	$('#del').click(function () {
+		if(confirm('你确定删除吗?')){
+            changeAmount($(this).closest('tr').attr('data_id'),0);
+            $(this).closest('tr').remove();
+		}
+    });
+    var total = 0;
+    $(".col5 span").each(function(){
+        total += parseFloat($(this).text());
+    });
+
+    $("#total").text(total.toFixed(2));
+
 });
+
+function changeAmount(goods_id,amount) {
+	$.get("/cart/ajax-cart.html",{goods_id:goods_id,amount:amount})
+}

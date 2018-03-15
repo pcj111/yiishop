@@ -21,7 +21,7 @@ class BrandController extends Controller
     public $enableCsrfValidation = false;
    //页面
    public function actionIndex(){
-       $a = Brand::find()->where(['is_deleted'=>0]);
+     $a = Brand::find()->where(['is_deleted'=>0]);
      $paper = new Pagination();
      //总条数
      $paper->totalCount = Brand::find()->count();
