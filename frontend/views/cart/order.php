@@ -506,7 +506,7 @@
 
 							<td><?=$row->name?></td>
 							<td>￥<?=$row->total?>.00 在线支付</td>
-							<td><?=date('Y-m-d H:i:s',$row->caeate_times)?></td>
+							<td><?=date('Y-m-d H:i:s',$row->create_time)?></td>
 							<td>已完成</td>
 							<td><a href="">查看</a> | <a href="">删除</a></td>
 						</tr>
