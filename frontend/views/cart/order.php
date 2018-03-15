@@ -492,33 +492,25 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td><a href="">852592106</a></td>
-							<td><a href=""><img src="/images/order1.jpg" alt="" /></a></td>
-							<td>王超平</td>
-							<td>￥35.00 货到付款</td>
-							<td>2013-11-12 16:28:14</td>
-							<td>已取消</td>
-							<td><a href="">查看</a> | <a href="">删除</a></td>
-						</tr>
+
+                        <?php foreach ($rows as $row):?>
 						<tr>
 							<td><a href="">852571653</a></td>
-							<td><a href=""><img src="/images/order2.jpg" alt="" /></a></td>
-							<td>王超平</td>
-							<td>￥35.00 在线支付</td>
-							<td>2013-11-13 19:28:14</td>
+                            <?php $s=\app\models\OrderGoods::find()->where(['order_id'=>$row->id])->all()?>
+
+							<td>
+                                <?php foreach ($s as $value):?>
+                                <a href=""><img src="<?=$value->logo?>" alt="" /></a>
+                                <?php endforeach;?>
+                            </td>
+
+							<td><?=$row->name?></td>
+							<td>￥<?=$row->total?>.00 在线支付</td>
+							<td><?=date('Y-m-d H:i:s',time())?></td>
 							<td>已完成</td>
 							<td><a href="">查看</a> | <a href="">删除</a></td>
 						</tr>
-						<tr>
-							<td><a href="">471196680</a></td>
-							<td><a href=""><img src="/images/order2.jpg" alt="" /></a></td>
-							<td>王超平</td>
-							<td>￥169.00 货到付款</td>
-							<td>2013-02-20 23:00:00</td>
-							<td>已完成</td>
-							<td><a href="">查看</a> | <a href="">删除</a></td>
-						</tr>
+                       <?php endforeach;?>
 					</tbody> 
 				</table>
 			</div>
