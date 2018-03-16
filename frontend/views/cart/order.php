@@ -495,7 +495,7 @@
 
                         <?php foreach ($rows as $row):?>
 						<tr>
-							<td><a href="">852571653</a></td>
+							<td><a href="">000000<?=$row->id?></a></td>
                             <?php $s=\app\models\OrderGoods::find()->where(['order_id'=>$row->id])->all()?>
 
 							<td>
@@ -503,7 +503,6 @@
                                 <a href=""><img src="<?=$value->logo?>" alt="" /></a>
                                 <?php endforeach;?>
                             </td>
-
 							<td><?=$row->name?></td>
 							<td>￥<?=$row->total?>.00 在线支付</td>
 							<td><?=date('Y-m-d H:i:s',$row->create_time)?></td>
